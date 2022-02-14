@@ -1,5 +1,10 @@
 # AstroSimulation
 
+Simulations of astrocytic calcium activity during spatial navigation.
+
+Virtual rality track: 180cm with 3 segments (60 cm) with different viual cues 
+
+
 Files:
  - Sim_gen_V3.py simulations with different number of trials per stimulus
  - Sim_gen_V3_S.py simulations with different number of spatial bins
