@@ -55,10 +55,11 @@ for alpha in [1]:
         for simulation in range(sim):
             stimS = np.arange(Sbins)
             stimScoord = stimS*(180/Sbins)+(180/Sbins)/2
-            centerPF_bin = binarize_space(np.asarray([centerPF]),Sbins)[0]
+            centerPF_bin = binarize_space(centerPF,Sbins)
+            # for single pos PF
+#            centerPF_bin = binarize_space(np.asarray([centerPF]),Sbins)[0]
 
-            #compute the f(s): mean along space modulated by a gaussian place field
-            #f_s = gauss(stimScoord,centerPF,sigmaPF,APF)+(1-alpha)*(-gauss(stimScoord,centerPF,sigmaPF,APF)+np.mean(gauss(stimScoord,centerPF,sigmaPF,APF)))
+
             
             # retrieve the standard dev
             dict_std = dict_fit['Fit_space_'+str(Sbins)]
@@ -66,10 +67,13 @@ for alpha in [1]:
             std_s = np.zeros((Sbins))
 
             for i in range(Sbins):
-                pos = np.abs(stimS[i]-centerPF_bin)
+                pos = np.abs(stimS[i]-centerPF_bin[roi])
+                # single PF pos
+#                 pos = np.abs(stimS[i]-centerPF_bin)
 
                 print(pos)
                 if pos<0:
+                    #just for check
                     slope, intercept, r, p, se,mean,std_mean = dict_std['Pos_m'+str(int(abs(pos)))]
                 else:
                     slope, intercept, r, p, se,mean,std_mean = dict_std['Pos_'+str(int(pos))]

@@ -49,34 +49,49 @@ Sbins = 12
 
 dict_gen={}
 for RR in [2,4,8,20,80]:
-    for alpha in [1,0.5]:
+    for alpha in [1,0.5,0]:
         for trial_id in range(len(trial_num)):
             trial = 2**(trial_num[trial_id])*4
             for simulation in range(sim):
                 stimS = np.arange(Sbins)
                 stimScoord = stimS*(180/Sbins)+(180/Sbins)/2
-                centerPF_bin = binarize_space(np.asarray([centerPF]),Sbins)[0]
+                centerPF_bin = binarize_space(centerPF,Sbins)
+                # for single pos PF
+#                 centerPF_bin = binarize_space(np.asarray([centerPF]),Sbins)[0]
 
-                #compute the f(s): mean along space modulated by a gaussian place field
-                #f_s = gauss(stimScoord,centerPF,sigmaPF,APF)+(1-alpha)*(-gauss(stimScoord,centerPF,sigmaPF,APF)+np.mean(gauss(stimScoord,centerPF,sigmaPF,APF)))
 
                 # retrieve the standard dev
                 dict_std = dict_fit['Fit_space_'+str(Sbins)]
                 f_s = np.zeros((Sbins))
                 std_s = np.zeros((Sbins))
+                for roi in range(ROInum):
 
-                for i in range(Sbins):
-                    pos = abs(stimS[i]-centerPF_bin)
-                    print(pos)
+                    for i in range(Sbins):
 
-                    slope, intercept, r, p, se,mean,std_mean = dict_std['Pos_'+str(int(pos))]
-                    f_s[i] = mean
-                    std_s[i] = mean*slope+intercept
-                if alpha==0:
-                    buff = np.mean(std_s)
-                    std_s[:] = buff
-                f_s = f_s +(1-alpha)*(-f_s+np.mean(f_s)) 
-                print(f_s)
+                        pos = abs(stimS[i]-centerPF_bin[roi])
+
+
+                        slope, intercept, r, p, se,mean,std_mean = dict_std['Pos_'+str(int(pos))]
+                        f_s[roi,i] = mean
+                        std_s[roi,i] = mean*slope+intercept
+                    if alpha==0:
+                        buff = np.mean(std_s[roi,:])
+                        std_s[roi,:] = buff
+                    f_s[roi,:] = f_s[roi,:] +(1-alpha)*(-f_s[roi,:]+np.mean(f_s[roi,:])) 
+
+################# for single PF position                
+#             for i in range(Sbins):
+#                 pos = abs(stimS[i]-centerPF_bin)
+                
+                
+#                 slope, intercept, r, p, se,mean,std_mean = dict_std['Pos_'+str(int(pos))]
+#                 f_s[i] = mean
+#                 std_s[i] = mean*slope+intercept
+#             if alpha==0:
+#                 buff = np.mean(std_s)
+#                 std_s[:] = buff
+#             f_s = f_s +(1-alpha)*(-f_s+np.mean(f_s)) 
+
                 data = np.empty((ROInum,Sbins,trial))
 
                 for roi in range(ROInum):

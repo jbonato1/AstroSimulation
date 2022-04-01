@@ -49,8 +49,8 @@ Sbins = 12
 
 
 dict_gen={}
-for alpha in [1]:
-    print('ALPHA',alpha)
+for alpha in [0]:
+    print('No spatial information simulation')
     for trial_id in range(len(trial_num)):
         trial = 2**(trial_num[trial_id])*4
         for simulation in range(sim):
@@ -58,8 +58,7 @@ for alpha in [1]:
             stimScoord = stimS*(180/Sbins)+(180/Sbins)/2
             centerPF_bin = binarize_space(np.asarray([centerPF]),Sbins)[0]
 
-            #compute the f(s): mean along space modulated by a gaussian place field
-            #f_s = gauss(stimScoord,centerPF,sigmaPF,APF)+(1-alpha)*(-gauss(stimScoord,centerPF,sigmaPF,APF)+np.mean(gauss(stimScoord,centerPF,sigmaPF,APF)))
+
             
             # retrieve the standard dev
             #
@@ -70,7 +69,6 @@ for alpha in [1]:
             dict_std = dict_fit['Fit_space_'+str(3)]
 
             for i in range(Sbins):
-                #pos = abs(stimS[i]-centerPF_bin)
                 binXblock = Sbins//3
 
                 
@@ -122,6 +120,6 @@ for alpha in [1]:
         
 
 
-#         file2 = open('/home/jbonato/Documents/AstroEncInfo/Results/MI_trial'+str(trial)+'_R4_space12_alpha'+str(alpha)+'visual_cue_noInfo.pkl','wb')
-#         pickle.dump(dict_gen,file2)
-#         file2.close()
+        file2 = open('/home/jbonato/Documents/AstroEncInfo/Results/MI_trial'+str(trial)+'_R4_space12_alpha'+str(alpha)+'visual_cue_noInfo.pkl','wb')
+        pickle.dump(dict_gen,file2)
+        file2.close()
